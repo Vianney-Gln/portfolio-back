@@ -8,6 +8,7 @@ const {
   updatePath,
   getPath,
   updateIntroduction,
+  getIntroduction,
 } = require("../models/portfolio");
 // Path
 const path = require("path");
@@ -65,9 +66,20 @@ portFolioRouter.get("/upload", (req, res) => {
     });
 });
 
+// Route getting introduction
+portFolioRouter.get("/introduction", (req, res) => {
+  getIntroduction()
+    .then((result) => {
+      res.status(200).send(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(404).send("error retrieving data");
+    });
+});
+
 // Route updating introduction
 portFolioRouter.put("/introduction", (req, res) => {
-  console.log(req.body);
   updateIntroduction(req.body)
     .then((result) => {
       if (result.affectedRows) {
