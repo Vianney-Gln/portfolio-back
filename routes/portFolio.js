@@ -13,6 +13,9 @@ const {
 // Path
 const path = require("path");
 
+//Middlewares
+const { runValidateIntroFields } = require("../middlewares/middlewares");
+
 const storage = multer.diskStorage({
   destination: function (req, file, callback) {
     const path = `uploads`;
@@ -79,7 +82,7 @@ portFolioRouter.get("/introduction", (req, res) => {
 });
 
 // Route updating introduction
-portFolioRouter.put("/introduction", (req, res) => {
+portFolioRouter.put("/introduction", runValidateIntroFields, (req, res) => {
   updateIntroduction(req.body)
     .then((result) => {
       if (result.affectedRows) {
