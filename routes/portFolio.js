@@ -31,16 +31,13 @@ const upload = multer({ storage: storage });
 portFolioRouter.post("/upload", upload.single("file"), (req, res) => {
   getPath()
     .then((getPathresult) => {
-      console.log(getPathresult.urlImage);
       updatePath(req.file.path).then(() => {
         fs.unlink(getPathresult.urlImage, (err) => {
           if (err) {
             console.error(err);
             return;
           }
-          console.log("file deleted");
-
-          res.status(201).send(req.file);
+          res.status(201).send();
         });
       });
     })
