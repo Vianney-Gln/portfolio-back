@@ -9,6 +9,16 @@ const db = connection.promise();
 const getProjects = () => {
   return db.query("SELECT * FROM projects").then((result) => result[0]);
 };
+/**
+ * Function getting only images from projects by id
+ * @param {number} id
+ * @returns {promise}
+ */
+const getPathImagesProjectsById = (id) => {
+  return db
+    .query("SELECT urlImage FROM projects WHERE id = ?", [id])
+    .then((result) => result[0][0]);
+};
 
 /**
  * Function creating project
@@ -24,4 +34,4 @@ const createProject = ({ name, url, urlImage, description, date }) => {
     .then((result) => result[0]);
 };
 
-module.exports = { getProjects, createProject };
+module.exports = { getProjects, createProject, getPathImagesProjectsById };

@@ -1,8 +1,14 @@
 const projectRouter = require("express").Router();
 // Models
-const { getProjects, createProject } = require("../models/projects");
+const {
+  getProjects,
+  createProject,
+  getPathImagesProjectsById,
+} = require("../models/projects");
 // Middlewares
 const { runValidateProjectFields } = require("../middlewares/middlewares");
+// Path for sendFile
+const path = require("path");
 // Multer
 const multer = require("multer");
 const storage = multer.diskStorage({
@@ -48,5 +54,27 @@ projectRouter.post(
       });
   }
 );
+
+projectRouter.get("/projects/image/:id", (req, res) => {
+  const options = {
+    root: path.join(""),
+  };
+  getPathImagesProjectsById(req.params.id)
+    .then((result) => {
+      if (result.urlImage) {
+        res.sendFile(result.urlImage, options, (err) => {
+          if (err) {
+            res.status(404).send("image not found");
+          }
+        });
+      } else {
+        res.status(404).send("image not found");
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(404).send("error,image not found");
+    });
+});
 
 module.exports = projectRouter;
