@@ -10,11 +10,16 @@ const getProjects = () => {
   return db.query("SELECT * FROM projects").then((result) => result[0]);
 };
 
+/**
+ * Function creating project
+ * @param {object} param0
+ * @returns {promise}
+ */
 const createProject = ({ name, url, urlImage, description, date }) => {
   return db
     .query(
-      "INSERT INTO projects (name, url, urlImage, description, date,isOpen) VALUES (?,?,?,?,?,?)",
-      [name, url, urlImage, description, date, false]
+      "INSERT INTO projects (name, url, urlImage, description, date) VALUES (?,?,?,?,?)",
+      [name, url, urlImage, description, date]
     )
     .then((result) => result[0]);
 };
