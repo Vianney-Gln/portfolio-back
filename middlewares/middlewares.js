@@ -1,4 +1,7 @@
-const { validateIntroFields } = require("../helper/verifFields");
+const {
+  validateIntroFields,
+  validateProjectFields,
+} = require("../helper/verifFields");
 
 const runValidateIntroFields = (req, res, next) => {
   const { actually, introduction } = req.body;
@@ -11,4 +14,21 @@ const runValidateIntroFields = (req, res, next) => {
   }
 };
 
-module.exports = { runValidateIntroFields };
+const runValidateProjectFields = (req, res, next) => {
+  const { name, url, date, description } = req.body;
+
+  const error = validateProjectFields({
+    name,
+    url,
+    date,
+    description,
+  });
+
+  if (error) {
+    res.status(401).send("error adding project");
+  } else {
+    next();
+  }
+};
+
+module.exports = { runValidateIntroFields, runValidateProjectFields };

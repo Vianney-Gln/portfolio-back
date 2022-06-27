@@ -1,6 +1,8 @@
 const projectRouter = require("express").Router();
 // Models
 const { getProjects, createProject } = require("../models/projects");
+// Middlewares
+const { runValidateProjectFields } = require("../middlewares/middlewares");
 // Multer
 const multer = require("multer");
 const storage = multer.diskStorage({
@@ -27,18 +29,24 @@ projectRouter.get("/projects", (req, res) => {
 });
 
 // Route creating a new project
-projectRouter.post("/projects", upload.single("image-project"), (req, res) => {
-  const { name, url, description, date } = req.body;
-  const urlImage = req.file.path;
+projectRouter.post(
+  "/projects",
+  upload.single("image-project"),
+  runValidateProjectFields,
+  (req, res) => {
+    let urlImage = null;
+    const { name, url, description, date } = req.body;
+    if (req.file) urlImage = req.file.path;
 
-  createProject({ name, url, urlImage, description, date })
-    .then((result) => {
-      res.status(201).send(`project ${result.insertId} created!`);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(403).send("error create project");
-    });
-});
+    createProject({ name, url, urlImage, description, date })
+      .then((result) => {
+        res.status(201).send(`project ${result.insertId} created!`);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(403).send("error create project");
+      });
+  }
+);
 
 module.exports = projectRouter;
