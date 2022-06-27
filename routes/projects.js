@@ -29,7 +29,8 @@ projectRouter.get("/projects", (req, res) => {
 // Route creating a new project
 projectRouter.post("/projects", upload.single("image-project"), (req, res) => {
   const { name, url, description, date } = req.body;
-  console.log(req.file);
+  const urlImage = req.file.path;
+
   createProject({ name, url, urlImage, description, date })
     .then((result) => {
       res.status(201).send(`project ${result.insertId} created!`);

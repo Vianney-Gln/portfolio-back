@@ -29,6 +29,7 @@ const upload = multer({ storage: storage });
 
 // Route uploading an image and delete the old
 portFolioRouter.post("/upload", upload.single("file"), (req, res) => {
+  console.log(req.file);
   getPath()
     .then((getPathresult) => {
       updatePath(req.file.path).then(() => {
