@@ -55,6 +55,7 @@ projectRouter.post(
   }
 );
 
+// Route sending the image file from one project by his id
 projectRouter.get("/projects/image/:id", (req, res) => {
   const options = {
     root: path.join(""),
