@@ -34,4 +34,15 @@ const createProject = ({ name, url, urlImage, description, date }) => {
     .then((result) => result[0]);
 };
 
-module.exports = { getProjects, createProject, getPathImagesProjectsById };
+const deleteProjectById = (id) => {
+  return db
+    .query("DELETE FROM projects WHERE id = ?", [id])
+    .then((result) => result[0]);
+};
+
+module.exports = {
+  getProjects,
+  createProject,
+  getPathImagesProjectsById,
+  deleteProjectById,
+};

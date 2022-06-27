@@ -29,20 +29,23 @@ const upload = multer({ storage: storage });
 
 // Route uploading an image and delete the old
 portFolioRouter.post("/upload", upload.single("file"), (req, res) => {
-  console.log(req.file);
-  getPath()
-    .then((getPathresult) => {
-      updatePath(req.file.path).then(() => {
-        fs.unlink(getPathresult.urlImage, (err) => {
-          if (err) {
-            console.error(err);
-            return;
-          }
-          res.status(201).send();
+  if (req.file) {
+    getPath()
+      .then((getPathresult) => {
+        updatePath(req.file.path).then(() => {
+          fs.unlink(getPathresult.urlImage, (err) => {
+            if (err) {
+              console.error(err);
+              return;
+            }
+            res.status(201).send();
+          });
         });
-      });
-    })
-    .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
+  } else {
+    res.status(404).send("image not found");
+  }
 });
 
 // Route getting one image

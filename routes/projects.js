@@ -4,11 +4,14 @@ const {
   getProjects,
   createProject,
   getPathImagesProjectsById,
+  deleteProjectById,
 } = require("../models/projects");
 // Middlewares
 const { runValidateProjectFields } = require("../middlewares/middlewares");
 // Path for sendFile
 const path = require("path");
+// FS
+const fs = require("fs");
 // Multer
 const multer = require("multer");
 const storage = multer.diskStorage({
@@ -75,6 +78,36 @@ projectRouter.get("/projects/image/:id", (req, res) => {
     .catch((err) => {
       console.log(err);
       res.status(404).send("error,image not found");
+    });
+});
+
+// Route deleting a project by his id, and remove the image associated to the server.
+
+projectRouter.delete("/projects/:id", (req, res) => {
+  //model de récupération du path de l'image
+  //model de suppression de la base de données, si ok, on lance fs.unlink(path)
+
+  getPathImagesProjectsById(req.params.id)
+    .then((result) => {
+      deleteProjectById(req.params.id)
+        .then(() => {
+          if (result.urlImage) {
+            fs.unlink(result.urlImage, (err) => {
+              if (err) console.log(err);
+            });
+          }
+          res
+            .status(200)
+            .send(`project with id ${req.params.id} deleted with success`);
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(404).send("error during the delete request");
+        });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(404).send("error during the request");
     });
 });
 
