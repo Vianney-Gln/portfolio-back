@@ -8,7 +8,10 @@ const {
   updateProjectById,
 } = require("../models/projects");
 // Middlewares
-const { runValidateProjectFields } = require("../middlewares/middlewares");
+const {
+  runValidateProjectFields,
+  runValidateProjectFieldsUpdate,
+} = require("../middlewares/middlewares");
 // Path for sendFile
 const path = require("path");
 // FS
@@ -113,15 +116,39 @@ projectRouter.delete("/projects/:id", (req, res) => {
 });
 
 // Route updating one project by his id and replace image uploaded
-projectRouter.put("/projects/:id", (req, res) => {
-  updateProjectById(req.body, req.params.id)
-    .then((result) => {
-      res.status(201).send(result);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(404).send("error during update");
-    });
-});
+projectRouter.put(
+  "/projects/:id",
+  upload.single("image-project"),
+  runValidateProjectFieldsUpdate,
+  (req, res) => {
+    getPathImagesProjectsById(req.params.id)
+      .then((imageProject) => {
+        let urlImage;
+        if (req.file) {
+          urlImage = req.file.path;
+        }
+        const data = { ...req.body, urlImage };
+        updateProjectById(data, req.params.id)
+          .then((result) => {
+            res.status(201).send(result);
+            if (imageProject.urlImage) {
+              fs.unlink(imageProject.urlImage, (err) => {
+                if (err) {
+                  console.log(err);
+                }
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            res.status(404).send("error during update");
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(404).send("error retrieving image from this project");
+      });
+  }
+);
 
 module.exports = projectRouter;

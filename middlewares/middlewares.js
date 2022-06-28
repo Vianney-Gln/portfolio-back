@@ -9,7 +9,7 @@ const runValidateIntroFields = (req, res, next) => {
   const error = validateIntroFields({ actually, introduction });
 
   if (error) {
-    res.status(401).send("error updating data");
+    res.status(401).send({ validationError: error.details });
   } else {
     next();
   }
@@ -27,7 +27,7 @@ const runValidateProjectFields = (req, res, next) => {
   });
 
   if (error) {
-    res.status(401).send("error adding project");
+    res.status(401).send({ validationError: error.details });
   } else {
     next();
   }
@@ -36,6 +36,7 @@ const runValidateProjectFields = (req, res, next) => {
 // Middleware verif create projects data fields
 const runValidateProjectFieldsUpdate = (req, res, next) => {
   const { name, url, date, description } = req.body;
+  console.log(req.body);
 
   const error = validateProjectFields(
     {
@@ -48,7 +49,7 @@ const runValidateProjectFieldsUpdate = (req, res, next) => {
   );
 
   if (error) {
-    res.status(401).send("error updating project");
+    res.status(401).send({ validationError: error.details });
   } else {
     next();
   }
