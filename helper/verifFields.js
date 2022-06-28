@@ -7,12 +7,13 @@ const validateIntroFields = (data) => {
   }).validate(data, { abortEarly: false, allowUnknown: true }).error;
 };
 
-const validateProjectFields = (data) => {
+const validateProjectFields = (data, toCreate = true) => {
+  const presence = toCreate ? "required" : "optional";
   return Joi.object({
-    name: Joi.string().presence("required"),
-    url: Joi.string().max(255).presence("required"),
-    date: Joi.string().max(255).presence("required"),
-    description: Joi.string().presence("required"),
+    name: Joi.string().presence(presence),
+    url: Joi.string().max(255).presence(presence),
+    date: Joi.string().max(255).presence(presence),
+    description: Joi.string().presence(presence),
   }).validate(data, { abortEarly: false, allowUnknown: true }).error;
 };
 

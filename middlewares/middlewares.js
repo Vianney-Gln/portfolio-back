@@ -3,6 +3,7 @@ const {
   validateProjectFields,
 } = require("../helper/verifFields");
 
+// Middleware verif introducton data fields
 const runValidateIntroFields = (req, res, next) => {
   const { actually, introduction } = req.body;
   const error = validateIntroFields({ actually, introduction });
@@ -14,6 +15,7 @@ const runValidateIntroFields = (req, res, next) => {
   }
 };
 
+// Middleware verif create projects data fields
 const runValidateProjectFields = (req, res, next) => {
   const { name, url, date, description } = req.body;
 
@@ -31,4 +33,29 @@ const runValidateProjectFields = (req, res, next) => {
   }
 };
 
-module.exports = { runValidateIntroFields, runValidateProjectFields };
+// Middleware verif create projects data fields
+const runValidateProjectFieldsUpdate = (req, res, next) => {
+  const { name, url, date, description } = req.body;
+
+  const error = validateProjectFields(
+    {
+      name,
+      url,
+      date,
+      description,
+    },
+    false
+  );
+
+  if (error) {
+    res.status(401).send("error updating project");
+  } else {
+    next();
+  }
+};
+
+module.exports = {
+  runValidateIntroFields,
+  runValidateProjectFields,
+  runValidateProjectFieldsUpdate,
+};
