@@ -34,9 +34,20 @@ const createProject = ({ name, url, urlImage, description, date }) => {
     .then((result) => result[0]);
 };
 
+/**
+ * Function deleteting one project by his id
+ * @param {*} id
+ * @returns
+ */
 const deleteProjectById = (id) => {
   return db
     .query("DELETE FROM projects WHERE id = ?", [id])
+    .then((result) => result[0]);
+};
+
+const updateProjectById = (data, id) => {
+  return db
+    .query("UPDATE projects SET ? WHERE id = ?", [data, id])
     .then((result) => result[0]);
 };
 
@@ -45,4 +56,5 @@ module.exports = {
   createProject,
   getPathImagesProjectsById,
   deleteProjectById,
+  updateProjectById,
 };

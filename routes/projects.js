@@ -5,6 +5,7 @@ const {
   createProject,
   getPathImagesProjectsById,
   deleteProjectById,
+  updateProjectById,
 } = require("../models/projects");
 // Middlewares
 const { runValidateProjectFields } = require("../middlewares/middlewares");
@@ -108,6 +109,18 @@ projectRouter.delete("/projects/:id", (req, res) => {
     .catch((err) => {
       console.log(err);
       res.status(404).send("error during the request");
+    });
+});
+
+// Route updating one project by his id and replace image uploaded
+projectRouter.put("/projects/:id", (req, res) => {
+  updateProjectById(req.body, req.params.id)
+    .then((result) => {
+      res.status(201).send(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(404).send("error during update");
     });
 });
 

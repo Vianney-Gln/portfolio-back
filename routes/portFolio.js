@@ -59,8 +59,6 @@ portFolioRouter.get("/upload", (req, res) => {
       res.sendFile(result.urlImage, options, (err) => {
         if (err) {
           res.send(err);
-        } else {
-          console.log("sent");
         }
       });
     })
