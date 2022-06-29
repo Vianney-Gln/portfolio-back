@@ -7,6 +7,7 @@ const {
   deleteProjectById,
   updateProjectById,
   deleteImageProjectById,
+  getProjectById,
 } = require("../models/projects");
 // Middlewares
 const {
@@ -39,6 +40,21 @@ projectRouter.get("/projects", (req, res) => {
     .catch((err) => {
       console.log(err);
       res.status(404).send("error, projects not founds");
+    });
+});
+
+// Routes gettin one project by id
+projectRouter.get("/projects/:id", (req, res) => {
+  getProjectById(req.params.id)
+    .then((result) => {
+      if (result) {
+        res.status(200).send(result);
+      } else {
+        res.status(404).send("no project found");
+      }
+    })
+    .catch((err) => {
+      res.status(404).send("error retrieving project");
     });
 });
 

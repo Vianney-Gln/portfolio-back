@@ -69,6 +69,17 @@ const deleteImageProjectById = (id) => {
     .then((result) => result[0]);
 };
 
+/**
+ * Function getting one project by his id
+ * @param {number} id
+ * @returns {promise}
+ */
+const getProjectById = (id) => {
+  return db
+    .query("SELECT * FROM projects WHERE id = ?", [id])
+    .then((result) => result[0][0]);
+};
+
 module.exports = {
   getProjects,
   createProject,
@@ -76,4 +87,5 @@ module.exports = {
   deleteProjectById,
   updateProjectById,
   deleteImageProjectById,
+  getProjectById,
 };
