@@ -36,8 +36,6 @@ const runValidateProjectFields = (req, res, next) => {
 // Middleware verif create projects data fields
 const runValidateProjectFieldsUpdate = (req, res, next) => {
   const { name, url, date, description } = req.body;
-  console.log(req.body);
-
   const error = validateProjectFields(
     {
       name,
@@ -47,7 +45,6 @@ const runValidateProjectFieldsUpdate = (req, res, next) => {
     },
     false
   );
-
   if (error) {
     res.status(401).send({ validationError: error.details });
   } else {

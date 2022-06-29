@@ -45,9 +45,27 @@ const deleteProjectById = (id) => {
     .then((result) => result[0]);
 };
 
+/**
+ * Function updating a project by his id
+ * @param {object} data
+ * @param {number} id
+ * @returns {promise}
+ */
+
 const updateProjectById = (data, id) => {
   return db
     .query("UPDATE projects SET ? WHERE id = ?", [data, id])
+    .then((result) => result[0]);
+};
+
+/**
+ * Function deleting image for one project by updating the field to null
+ * @param {number} id
+ * @returns {promise}
+ */
+const deleteImageProjectById = (id) => {
+  return db
+    .query("UPDATE projects SET urlImage = null WHERE id = ?", [id])
     .then((result) => result[0]);
 };
 
@@ -57,4 +75,5 @@ module.exports = {
   getPathImagesProjectsById,
   deleteProjectById,
   updateProjectById,
+  deleteImageProjectById,
 };

@@ -6,6 +6,7 @@ const {
   getPathImagesProjectsById,
   deleteProjectById,
   updateProjectById,
+  deleteImageProjectById,
 } = require("../models/projects");
 // Middlewares
 const {
@@ -150,5 +151,46 @@ projectRouter.put(
       });
   }
 );
+
+// Route deleting the image for one project by id
+
+projectRouter.delete("/project/deleteImage/:id", (req, res) => {
+  getPathImagesProjectsById(req.params.id)
+    .then((result) => {
+      if (result) {
+        const urlToUnlink = result.urlImage;
+        deleteImageProjectById(req.params.id)
+          .then((result) => {
+            if (result.changedRows) {
+              console.log("coucou");
+              fs.unlink(urlToUnlink, (err) => {
+                if (err) {
+                  console.log(err);
+                  res
+                    .status(400)
+                    .send(
+                      "image deleted but error during suppression image from the server"
+                    );
+                } else {
+                  res.status(201).send("image deleted from the project");
+                }
+              });
+            } else {
+              res.status(404).send("no image to delete");
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            res.status(404).send("error deleting image from project");
+          });
+      } else {
+        res.send("no image found");
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(404).send("error retrieving image for this project");
+    });
+});
 
 module.exports = projectRouter;
