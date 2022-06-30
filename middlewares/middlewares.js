@@ -3,6 +3,9 @@ const {
   validateProjectFields,
 } = require("../helper/verifFields");
 
+// Helper
+const { hashPassword } = require("../helper/utility");
+
 // Middleware verif introducton data fields
 const runValidateIntroFields = (req, res, next) => {
   const { actually, introduction } = req.body;
@@ -52,8 +55,22 @@ const runValidateProjectFieldsUpdate = (req, res, next) => {
   }
 };
 
+const runHashPassword = (req, res, next) => {
+  const { hashedPassword } = req.body;
+  hashPassword(hashedPassword, 10)
+    .then((passHashed) => {
+      req.hash = passHashed;
+      next();
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400).send("error during hash password");
+    });
+};
+
 module.exports = {
   runValidateIntroFields,
   runValidateProjectFields,
   runValidateProjectFieldsUpdate,
+  runHashPassword,
 };
