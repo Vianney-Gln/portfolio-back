@@ -1,4 +1,6 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 /**
  * Function hashing passwords
@@ -10,4 +12,14 @@ const hashPassword = (password, round) => {
   return bcrypt.hash(password, round);
 };
 
-module.exports = { hashPassword };
+/**
+ * Function creating a token using email, uuid and a secret key
+ * @param {string} email
+ * @param {string} uuid
+ * @returns {string}
+ */
+const calculateToken = (email, uuid) => {
+  return jwt.sign({ email, uuid }, process.env.SECRET_KEY);
+};
+
+module.exports = { hashPassword, calculateToken };

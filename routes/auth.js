@@ -9,8 +9,14 @@ const {
 //UniqId
 const uniqId = require("uniqid");
 
+//bcrypt
+const bcrypt = require("bcrypt");
+
 // Model
 const { createUser } = require("../models/auth");
+
+//CalculateToken
+const { calculateToken } = require("../helper/utility");
 
 // Route creating a new user
 authRouter.post(
@@ -35,7 +41,21 @@ authRouter.post(
 // Route checking credentials, compare input password with hashedPassword, then generate a token
 
 authRouter.post("/", getPassword, (req, res) => {
-  res.send(req.body);
+  const { password, hashedPassword, email, uuid } = req.body;
+  bcrypt
+    .compare(password, hashedPassword)
+    .then((result) => {
+      if (result) {
+        const token = calculateToken(email, uuid);
+        res.status(200).send(token);
+      } else {
+        res.status(401).send("wrong creds");
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send("error during decryption");
+    });
 });
 
 module.exports = authRouter;
