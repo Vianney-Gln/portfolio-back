@@ -1,10 +1,12 @@
+// Helper
 const {
   validateIntroFields,
   validateProjectFields,
 } = require("../helper/verifFields");
-
-// Helper
 const { hashPassword } = require("../helper/utility");
+
+// Models
+const { getUserByEmail } = require("../models/auth");
 
 // Middleware verif introducton data fields
 const runValidateIntroFields = (req, res, next) => {
@@ -68,9 +70,21 @@ const runHashPassword = (req, res, next) => {
     });
 };
 
+const runGetUserByEmail = (req, res, next) => {
+  const { email } = req.body;
+  getUserByEmail(email).then((result) => {
+    if (result) {
+      res.status(401).send("email already used");
+    } else {
+      next();
+    }
+  });
+};
+
 module.exports = {
   runValidateIntroFields,
   runValidateProjectFields,
   runValidateProjectFieldsUpdate,
   runHashPassword,
+  runGetUserByEmail,
 };
