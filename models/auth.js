@@ -13,4 +13,19 @@ const getUserByEmail = (email) => {
     .then((result) => result[0][0]);
 };
 
-module.exports = { getUserByEmail };
+/**
+ * Function creating a new user
+ * @param {object}
+ * @returns {promise}
+ */
+const createUser = ({ email, hashPassword, uuid }) => {
+  return db
+    .query("INSERT INTO user (email,hashedPassword,uuid) VALUES (?,?,?)", [
+      email,
+      hashPassword,
+      uuid,
+    ])
+    .then((result) => result[0]);
+};
+
+module.exports = { getUserByEmail, createUser };
