@@ -1,3 +1,5 @@
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 // Helper
 const {
   validateIntroFields,
@@ -95,6 +97,20 @@ const getPassword = (req, res, next) => {
   });
 };
 
+const checkAuth = (req, res, next) => {
+  let token = null;
+  if (req.headers.authorization) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+  jwt.verify(token, process.env.SECRET_KEY, (err) => {
+    if (err) {
+      res.status(401).send("you don't have the permission");
+    } else {
+      next();
+    }
+  });
+};
+
 module.exports = {
   runValidateIntroFields,
   runValidateProjectFields,
@@ -102,4 +118,5 @@ module.exports = {
   runHashPassword,
   runGetUserByEmail,
   getPassword,
+  checkAuth,
 };

@@ -4,6 +4,7 @@ const {
   runHashPassword,
   runGetUserByEmail,
   getPassword,
+  checkAuth,
 } = require("../middlewares/middlewares");
 
 //UniqId

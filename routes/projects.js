@@ -13,6 +13,7 @@ const {
 const {
   runValidateProjectFields,
   runValidateProjectFieldsUpdate,
+  checkAuth,
 } = require("../middlewares/middlewares");
 // Path for sendFile
 const path = require("path");
