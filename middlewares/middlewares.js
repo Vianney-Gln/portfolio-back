@@ -57,6 +57,7 @@ const runValidateProjectFieldsUpdate = (req, res, next) => {
   }
 };
 
+// Middleware running hashPassword,go next function or send an error
 const runHashPassword = (req, res, next) => {
   const { hashedPassword } = req.body;
   hashPassword(hashedPassword, 10)
@@ -70,6 +71,7 @@ const runHashPassword = (req, res, next) => {
     });
 };
 
+// Middleware checking if email is already in use, go next function no email found, send an error if found
 const runGetUserByEmail = (req, res, next) => {
   const { email } = req.body;
   getUserByEmail(email).then((result) => {
