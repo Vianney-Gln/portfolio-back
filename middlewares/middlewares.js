@@ -83,10 +83,23 @@ const runGetUserByEmail = (req, res, next) => {
   });
 };
 
+const getPassword = (req, res, next) => {
+  const { email } = req.body;
+  getUserByEmail(email).then((user) => {
+    if (user) {
+      req.body = { ...req.body, ...user };
+      next();
+    } else {
+      res.status(401).send("wrong creds");
+    }
+  });
+};
+
 module.exports = {
   runValidateIntroFields,
   runValidateProjectFields,
   runValidateProjectFieldsUpdate,
   runHashPassword,
   runGetUserByEmail,
+  getPassword,
 };

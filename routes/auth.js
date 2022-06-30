@@ -3,6 +3,7 @@ const authRouter = require("express").Router();
 const {
   runHashPassword,
   runGetUserByEmail,
+  getPassword,
 } = require("../middlewares/middlewares");
 
 //UniqId
@@ -30,5 +31,11 @@ authRouter.post(
       });
   }
 );
+
+// Route checking credentials, compare input password with hashedPassword, then generate a token
+
+authRouter.post("/", getPassword, (req, res) => {
+  res.send(req.body);
+});
 
 module.exports = authRouter;
