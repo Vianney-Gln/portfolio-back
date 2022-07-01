@@ -86,18 +86,14 @@ projectRouter.get("/projects/image/:id", (req, res) => {
   getPathImagesProjectsById(req.params.id)
     .then((result) => {
       if (result.urlImage) {
-        console.log(result.urlImage.split("\\")[1]);
-        res.sendFile(
-          path.resolve(
-            `${__direname}portfolio-back/uploads`,
-            `${result.urlImage.split("\\")[1]}`
-          ),
-          (err) => {
-            if (err) {
-              res.status(404).send(err);
-            }
+        const image = result.urlImage.split("\\")[1];
+        const dir = result.urlImage.split("\\")[0];
+
+        res.sendFile(image, { root: dir }, (err) => {
+          if (err) {
+            res.status(404).send(err);
           }
-        );
+        });
       } else {
         res.status(404).send("image not found");
       }
