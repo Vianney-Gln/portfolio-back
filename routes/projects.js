@@ -178,7 +178,6 @@ projectRouter.delete("/project/deleteImage/:id", checkAuth, (req, res) => {
         deleteImageProjectById(req.params.id)
           .then((result) => {
             if (result.changedRows) {
-              console.log("coucou");
               fs.unlink(urlToUnlink, (err) => {
                 if (err) {
                   console.log(err);

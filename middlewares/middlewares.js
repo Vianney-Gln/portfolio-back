@@ -126,10 +126,8 @@ const checkAuth = (req, res, next) => {
 // Function called on componant mounting (useEffect) for connection and allow only admin to access to manage files, then go next
 const verifyToken = (req, res) => {
   let token = null;
-  console.log(req.headers);
   if (req.headers.authorization) {
     token = req.headers.authorization.split(" ")[1];
-    console.log(token);
   }
   jwt.verify(token, process.env.SECRET_KEY, (err) => {
     if (err) {
