@@ -83,17 +83,20 @@ projectRouter.post(
 
 // Route sending the image file from one project by his id
 projectRouter.get("/projects/image/:id", (req, res) => {
+  const options = {
+    root: path.join(__dirname, ".."),
+  };
+
+  console.log(options.root);
+
   getPathImagesProjectsById(req.params.id)
     .then((result) => {
       if (result.urlImage) {
-        res.sendFile(
-          path.resolve(__dirname, `../${result.urlImage.split("/")[1]}`),
-          (err) => {
-            if (err) {
-              res.status(404).send(err);
-            }
+        res.sendFile(result.urlImage, options, (err) => {
+          if (err) {
+            res.status(404).send("image not found");
           }
-        );
+        });
       } else {
         res.status(404).send("image not found");
       }
