@@ -87,7 +87,7 @@ projectRouter.get("/projects/image/:id", (req, res) => {
     .then((result) => {
       if (result.urlImage) {
         res.sendFile(
-          path.resolve(__dirname, `../${result.urlImage}`),
+          path.resolve(__dirname, `../${result.urlImage.split("/")[1]}`),
           (err) => {
             if (err) {
               res.status(404).send(err);
