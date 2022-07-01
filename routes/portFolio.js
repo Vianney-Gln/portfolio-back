@@ -59,12 +59,12 @@ portFolioRouter.post(
 // Route getting one image
 
 portFolioRouter.get("/upload", (req, res) => {
-  const options = {
-    root: path.join(""),
-  };
   getPath()
     .then((result) => {
-      res.sendFile(result.urlImage, options, (err) => {
+      const image = result.urlImage.split("\\")[1];
+      const dir = result.urlImage.split("\\")[0];
+
+      res.sendFile(image, { root: dir }, (err) => {
         if (err) {
           res.send(err);
         }
