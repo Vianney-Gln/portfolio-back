@@ -111,13 +111,11 @@ const getPassword = (req, res, next) => {
  */
 const checkAuth = (req, res, next) => {
   let token = null;
-  console.log(req.headers.authorization);
   if (req.headers.authorization) {
     token = req.headers.authorization.split(" ")[1];
   }
   jwt.verify(token, process.env.SECRET_KEY, (err) => {
     if (err) {
-      console.log(err);
       res.status(401).send("you don't have the permission");
     } else {
       next();

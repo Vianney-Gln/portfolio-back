@@ -22,6 +22,7 @@ const { calculateToken } = require("../helper/utility");
 // Route creating a new user
 authRouter.post(
   "/createUser",
+  checkAuth,
   runGetUserByEmail,
   runHashPassword,
   (req, res) => {
