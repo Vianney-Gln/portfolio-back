@@ -61,14 +61,17 @@ portFolioRouter.post(
 portFolioRouter.get("/upload", (req, res) => {
   getPath()
     .then((result) => {
-      const image = result.urlImage.split("\\")[1];
-      const dir = result.urlImage.split("\\")[0];
-
-      res.sendFile(image, { root: dir }, (err) => {
-        if (err) {
-          res.send(err);
-        }
-      });
+      if (result.urlImage) {
+        const image = result.urlImage.split("/")[1];
+        const dir = result.urlImage.split("/")[0];
+        res.sendFile(image, { root: dir }, (err) => {
+          if (err) {
+            res.send(err);
+          }
+        });
+      } else {
+        res.status(404).send("oups error");
+      }
     })
     .catch((err) => {
       console.log(err);
