@@ -89,7 +89,7 @@ projectRouter.get("/projects/image/:id", (req, res) => {
         console.log(result.urlImage.split("\\")[1]);
         res.sendFile(
           path.resolve(
-            "portfolio-back/uploads",
+            `${__direname}portfolio-back/uploads`,
             `${result.urlImage.split("\\")[1]}`
           ),
           (err) => {
