@@ -106,10 +106,7 @@ projectRouter.get("/projects/image/:id", (req, res) => {
 
 // Route deleting a project by his id, and remove the image associated to the server.
 
-projectRouter.delete("/projects/:id", (req, res) => {
-  //model de récupération du path de l'image
-  //model de suppression de la base de données, si ok, on lance fs.unlink(path)
-
+projectRouter.delete("/projects/:id", checkAuth, (req, res) => {
   getPathImagesProjectsById(req.params.id)
     .then((result) => {
       deleteProjectById(req.params.id)
@@ -137,6 +134,7 @@ projectRouter.delete("/projects/:id", (req, res) => {
 // Route updating one project by his id and replace image uploaded
 projectRouter.put(
   "/projects/:id",
+  checkAuth,
   upload.single("image-project"),
   runValidateProjectFieldsUpdate,
   (req, res) => {
@@ -172,7 +170,7 @@ projectRouter.put(
 
 // Route deleting the image for one project by id
 
-projectRouter.delete("/project/deleteImage/:id", (req, res) => {
+projectRouter.delete("/project/deleteImage/:id", checkAuth, (req, res) => {
   getPathImagesProjectsById(req.params.id)
     .then((result) => {
       if (result) {
