@@ -94,7 +94,7 @@ projectRouter.get("/projects/image/:id", (req, res) => {
       if (result.urlImage) {
         res.sendFile(result.urlImage, options, (err) => {
           if (err) {
-            res.status(404).send("image not found");
+            res.status(404).send(err);
           }
         });
       } else {
