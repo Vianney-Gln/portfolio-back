@@ -85,6 +85,12 @@ const runGetUserByEmail = (req, res, next) => {
   });
 };
 
+/**
+ * Function getting password and all users infos
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
 const getPassword = (req, res, next) => {
   const { email } = req.body;
   getUserByEmail(email).then((user) => {
@@ -97,16 +103,41 @@ const getPassword = (req, res, next) => {
   });
 };
 
+/**
+ * Function checking the token access forEach routes post or update
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
 const checkAuth = (req, res, next) => {
   let token = null;
+  console.log(req.headers.authorization);
   if (req.headers.authorization) {
     token = req.headers.authorization.split(" ")[1];
   }
   jwt.verify(token, process.env.SECRET_KEY, (err) => {
     if (err) {
+      console.log(err);
       res.status(401).send("you don't have the permission");
     } else {
       next();
+    }
+  });
+};
+
+// Function called on componant mounting (useEffect) for connection and allow only admin to access to manage files, then go next
+const verifyToken = (req, res) => {
+  let token = null;
+  console.log(req.headers);
+  if (req.headers.authorization) {
+    token = req.headers.authorization.split(" ")[1];
+    console.log(token);
+  }
+  jwt.verify(token, process.env.SECRET_KEY, (err) => {
+    if (err) {
+      res.status(200).send(false);
+    } else {
+      res.status(201).send(true);
     }
   });
 };
@@ -119,4 +150,5 @@ module.exports = {
   runGetUserByEmail,
   getPassword,
   checkAuth,
+  verifyToken,
 };

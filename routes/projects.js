@@ -62,6 +62,7 @@ projectRouter.get("/projects/:id", (req, res) => {
 // Route creating a new project
 projectRouter.post(
   "/projects",
+  checkAuth,
   upload.single("image-project"),
   runValidateProjectFields,
   (req, res) => {
