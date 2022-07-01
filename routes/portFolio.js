@@ -14,7 +14,10 @@ const {
 const path = require("path");
 
 //Middlewares
-const { runValidateIntroFields } = require("../middlewares/middlewares");
+const {
+  runValidateIntroFields,
+  checkAuth,
+} = require("../middlewares/middlewares");
 
 const storage = multer.diskStorage({
   destination: function (req, file, callback) {
@@ -28,25 +31,30 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Route uploading an image and delete the old
-portFolioRouter.post("/upload", upload.single("file"), (req, res) => {
-  if (req.file) {
-    getPath()
-      .then((getPathresult) => {
-        updatePath(req.file.path).then(() => {
-          fs.unlink(getPathresult.urlImage, (err) => {
-            if (err) {
-              console.error(err);
-              return;
-            }
-            res.status(201).send();
+portFolioRouter.post(
+  "/upload",
+  checkAuth,
+  upload.single("file"),
+  (req, res) => {
+    if (req.file) {
+      getPath()
+        .then((getPathresult) => {
+          updatePath(req.file.path).then(() => {
+            fs.unlink(getPathresult.urlImage, (err) => {
+              if (err) {
+                console.error(err);
+                return;
+              }
+              res.status(201).send();
+            });
           });
-        });
-      })
-      .catch((err) => console.log(err));
-  } else {
-    res.status(404).send("image not found");
+        })
+        .catch((err) => console.log(err));
+    } else {
+      res.status(404).send("image not found");
+    }
   }
-});
+);
 
 // Route getting one image
 
@@ -81,16 +89,21 @@ portFolioRouter.get("/introduction", (req, res) => {
 });
 
 // Route updating introduction
-portFolioRouter.put("/introduction", runValidateIntroFields, (req, res) => {
-  updateIntroduction(req.body)
-    .then((result) => {
-      if (result.affectedRows) {
-        res.status(201).send("modification réussie");
-      } else {
-        res.status(200).send("modification non réalisée");
-      }
-    })
-    .catch((err) => console.log(err));
-});
+portFolioRouter.put(
+  "/introduction",
+  checkAuth,
+  runValidateIntroFields,
+  (req, res) => {
+    updateIntroduction(req.body)
+      .then((result) => {
+        if (result.affectedRows) {
+          res.status(201).send("modification réussie");
+        } else {
+          res.status(200).send("modification non réalisée");
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+);
 
 module.exports = portFolioRouter;
