@@ -33,4 +33,10 @@ const updateIntroduction = (dataToUpdate) => {
     .then((result) => result[0]);
 };
 
-module.exports = { updatePath, getPath, updateIntroduction };
+const getIntroduction = () => {
+  return db
+    .query("SELECT introduction,actually FROM portfolio")
+    .then((result) => result[0][0]);
+};
+
+module.exports = { updatePath, getPath, updateIntroduction, getIntroduction };

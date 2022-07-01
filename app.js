@@ -13,6 +13,7 @@ pool.getConnection((err, conn) => {
     console.log(`connected as id ${conn.threadId}`);
   }
 });
+
 // Cross Origin
 app.use(cors());
 
