@@ -4,7 +4,7 @@ const portFolioRouter = require("express").Router();
 const {
   updatePath,
   updateAvatar,
-  getPath,
+  getAvatar,
   updateIntroduction,
   getIntroduction,
 } = require("../models/portfolio");
@@ -29,26 +29,15 @@ portFolioRouter.post("/upload", (req, res) => {
     });
 });
 
-// Route getting one image
-
+// Route getting avatar
 portFolioRouter.get("/upload", (req, res) => {
-  getPath()
+  getAvatar()
     .then((result) => {
-      if (result.urlImage) {
-        const image = result.urlImage.split("/")[1];
-        const dir = result.urlImage.split("/")[0];
-        res.sendFile(image, { root: dir }, (err) => {
-          if (err) {
-            res.send(err);
-          }
-        });
-      } else {
-        res.status(404).send("oups error");
-      }
+      res.status(200).send(result);
     })
     .catch((err) => {
       console.log(err);
-      res.status(500).send("error getting image");
+      res.status(404).send("error retrieving image");
     });
 });
 

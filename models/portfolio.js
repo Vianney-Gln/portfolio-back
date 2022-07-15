@@ -18,12 +18,12 @@ const updateAvatar = (data) => {
 };
 
 /**
- * Function getting the path from image
+ * Function getting avatar
  * @returns {promise}
  */
-const getPath = () => {
+const getAvatar = () => {
   return db
-    .query("SELECT urlImage from portfolio")
+    .query("SELECT base64,type from portfolio")
     .then((result) => result[0][0]);
 };
 /**
@@ -45,7 +45,7 @@ const getIntroduction = () => {
 
 module.exports = {
   updatePath,
-  getPath,
+  getAvatar,
   updateIntroduction,
   getIntroduction,
   updateAvatar,
