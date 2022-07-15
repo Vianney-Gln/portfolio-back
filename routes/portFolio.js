@@ -17,8 +17,8 @@ const {
   checkAuth,
 } = require("../middlewares/middlewares");
 
-// Route uploading an image and delete the old
-portFolioRouter.post("/upload", (req, res) => {
+// Route uploading avatar image and delete the old
+portFolioRouter.post("/upload", checkAuth, (req, res) => {
   updateAvatar(req.body)
     .then(() => {
       res.status(201).send("modif photo ok");
