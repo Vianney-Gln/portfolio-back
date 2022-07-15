@@ -1,11 +1,9 @@
 const portFolioRouter = require("express").Router();
-// Multer
-const multer = require("multer");
-// FS
-const fs = require("fs");
+
 // Models
 const {
   updatePath,
+  updateAvatar,
   getPath,
   updateIntroduction,
   getIntroduction,
@@ -19,42 +17,17 @@ const {
   checkAuth,
 } = require("../middlewares/middlewares");
 
-const storage = multer.diskStorage({
-  destination: function (req, file, callback) {
-    const path = `uploads`;
-    callback(null, path);
-  },
-  filename: function (req, file, callback) {
-    callback(null, `${file.originalname}`);
-  },
-});
-const upload = multer({ storage: storage });
-
 // Route uploading an image and delete the old
-portFolioRouter.post(
-  "/upload",
-  checkAuth,
-  upload.single("file"),
-  (req, res) => {
-    if (req.file) {
-      getPath()
-        .then((getPathresult) => {
-          updatePath(req.file.path).then(() => {
-            fs.unlink(getPathresult.urlImage, (err) => {
-              if (err) {
-                console.error(err);
-                return;
-              }
-              res.status(201).send();
-            });
-          });
-        })
-        .catch((err) => console.log(err));
-    } else {
-      res.status(404).send("image not found");
-    }
-  }
-);
+portFolioRouter.post("/upload", (req, res) => {
+  updateAvatar(req.body)
+    .then(() => {
+      res.status(201).send("modif photo ok");
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400).send("error change photo");
+    });
+});
 
 // Route getting one image
 

@@ -13,6 +13,10 @@ const updatePath = (urlImage) => {
     .then((result) => result[0]);
 };
 
+const updateAvatar = (data) => {
+  return db.query("UPDATE portfolio SET ?", [data]).then((result) => result[0]);
+};
+
 /**
  * Function getting the path from image
  * @returns {promise}
@@ -39,4 +43,10 @@ const getIntroduction = () => {
     .then((result) => result[0][0]);
 };
 
-module.exports = { updatePath, getPath, updateIntroduction, getIntroduction };
+module.exports = {
+  updatePath,
+  getPath,
+  updateIntroduction,
+  getIntroduction,
+  updateAvatar,
+};
