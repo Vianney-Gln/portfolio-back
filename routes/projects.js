@@ -105,11 +105,12 @@ projectRouter.get("/project/image/:id", (req, res) => {
     });
 });
 
-// Route deleting the image for one project by id
+// Route deleting image for one project by id
 projectRouter.delete("/project/deleteImage/:id", checkAuth, (req, res) => {
+  console.log(req.params.id);
   deleteImageProjectById(req.params.id)
     .then(() => {
-      res.status((203).send());
+      res.status(203).send();
     })
     .catch((err) => {
       console.log(err);
