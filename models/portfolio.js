@@ -13,13 +13,17 @@ const updatePath = (urlImage) => {
     .then((result) => result[0]);
 };
 
+const updateAvatar = (data) => {
+  return db.query("UPDATE portfolio SET ?", [data]).then((result) => result[0]);
+};
+
 /**
- * Function getting the path from image
+ * Function getting avatar
  * @returns {promise}
  */
-const getPath = () => {
+const getAvatar = () => {
   return db
-    .query("SELECT urlImage from portfolio")
+    .query("SELECT base64,type from portfolio")
     .then((result) => result[0][0]);
 };
 /**
@@ -39,4 +43,10 @@ const getIntroduction = () => {
     .then((result) => result[0][0]);
 };
 
-module.exports = { updatePath, getPath, updateIntroduction, getIntroduction };
+module.exports = {
+  updatePath,
+  getAvatar,
+  updateIntroduction,
+  getIntroduction,
+  updateAvatar,
+};

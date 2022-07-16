@@ -117,6 +117,7 @@ const checkAuth = (req, res, next) => {
   jwt.verify(token, process.env.SECRET_KEY, (err) => {
     if (err) {
       res.status(401).send("you don't have the permission");
+      console.log(err);
     } else {
       next();
     }
