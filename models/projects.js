@@ -10,6 +10,12 @@ const getProjects = () => {
   return db.query("SELECT * FROM projects").then((result) => result[0]);
 };
 
+const getProjectImageById = (id) => {
+  return db
+    .query("SELECT base64, type FROM projects WHERE id = ?", [id])
+    .then((result) => result[0][0]);
+};
+
 /**
  * Function creating project
  * @param {object} param0
@@ -66,7 +72,9 @@ const deleteImageProjectById = (id) => {
  */
 const getProjectById = (id) => {
   return db
-    .query("SELECT * FROM projects WHERE id = ?", [id])
+    .query("SELECT id,name,url,description,date FROM projects WHERE id = ?", [
+      id,
+    ])
     .then((result) => result[0][0]);
 };
 
@@ -77,4 +85,5 @@ module.exports = {
   updateProjectById,
   deleteImageProjectById,
   getProjectById,
+  getProjectImageById,
 };

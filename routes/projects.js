@@ -8,6 +8,7 @@ const {
   updateProjectById,
   deleteImageProjectById,
   getProjectById,
+  getProjectImageById,
 } = require("../models/projects");
 // Middlewares
 const {
@@ -61,31 +62,7 @@ projectRouter.post(
   }
 );
 
-// Route sending the image file from one project by his id
-projectRouter.get("/projects/image/:id", (req, res) => {
-  getPathImagesProjectsById(req.params.id)
-    .then((result) => {
-      if (result.urlImage) {
-        const image = result.urlImage.split("\\")[1];
-        const dir = result.urlImage.split("\\")[0];
-
-        res.sendFile(image, { root: dir }, (err) => {
-          if (err) {
-            res.status(404).send(err);
-          }
-        });
-      } else {
-        res.status(404).send("image not found");
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(404).send("error,image not found");
-    });
-});
-
 // Route deleting a project by his id, and remove the image associated to the server.
-
 projectRouter.delete("/projects/:id", checkAuth, (req, res) => {
   deleteProjectById(req.params.id)
     .then(() => {
@@ -105,7 +82,7 @@ projectRouter.put(
   checkAuth,
   runValidateProjectFieldsUpdate,
   (req, res) => {
-    updateProjectById(data, req.params.id)
+    updateProjectById(req.body, req.params.id)
       .then(() => {
         res.status(201).send("project up to date");
       })
@@ -116,8 +93,19 @@ projectRouter.put(
   }
 );
 
-// Route deleting the image for one project by id
+// Route getting one image project by his id
+projectRouter.get("/project/image/:id", (req, res) => {
+  getProjectImageById(req.params.id)
+    .then((result) => {
+      res.status(200).send(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(404).send("error retrieving image from this project");
+    });
+});
 
+// Route deleting the image for one project by id
 projectRouter.delete("/project/deleteImage/:id", checkAuth, (req, res) => {
   deleteImageProjectById(req.params.id)
     .then(() => {
