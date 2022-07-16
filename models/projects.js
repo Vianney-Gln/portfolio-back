@@ -9,16 +9,6 @@ const db = connection.promise();
 const getProjects = () => {
   return db.query("SELECT * FROM projects").then((result) => result[0]);
 };
-/**
- * Function getting only images from projects by id
- * @param {number} id
- * @returns {promise}
- */
-const getPathImagesProjectsById = (id) => {
-  return db
-    .query("SELECT urlImage FROM projects WHERE id = ?", [id])
-    .then((result) => result[0][0]);
-};
 
 /**
  * Function creating project
@@ -65,7 +55,7 @@ const updateProjectById = (data, id) => {
  */
 const deleteImageProjectById = (id) => {
   return db
-    .query("UPDATE projects SET urlImage = null WHERE id = ?", [id])
+    .query("UPDATE projects SET base64 = null, type = null WHERE id = ?", [id])
     .then((result) => result[0]);
 };
 
@@ -83,7 +73,6 @@ const getProjectById = (id) => {
 module.exports = {
   getProjects,
   createProject,
-  getPathImagesProjectsById,
   deleteProjectById,
   updateProjectById,
   deleteImageProjectById,

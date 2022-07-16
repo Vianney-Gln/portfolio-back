@@ -105,32 +105,13 @@ projectRouter.put(
   checkAuth,
   runValidateProjectFieldsUpdate,
   (req, res) => {
-    getPathImagesProjectsById(req.params.id)
-      .then((imageProject) => {
-        let urlImage;
-        if (req.file) {
-          urlImage = req.file.path;
-        }
-        const data = { ...req.body, urlImage };
-        updateProjectById(data, req.params.id)
-          .then((result) => {
-            res.status(201).send(result);
-            if (imageProject.urlImage) {
-              fs.unlink(imageProject.urlImage, (err) => {
-                if (err) {
-                  console.log(err);
-                }
-              });
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-            res.status(404).send("error during update");
-          });
+    updateProjectById(data, req.params.id)
+      .then(() => {
+        res.status(201).send("project up to date");
       })
       .catch((err) => {
         console.log(err);
-        res.status(404).send("error retrieving image from this project");
+        res.status(404).send("error during update");
       });
   }
 );
@@ -138,40 +119,13 @@ projectRouter.put(
 // Route deleting the image for one project by id
 
 projectRouter.delete("/project/deleteImage/:id", checkAuth, (req, res) => {
-  getPathImagesProjectsById(req.params.id)
-    .then((result) => {
-      if (result) {
-        const urlToUnlink = result.urlImage;
-        deleteImageProjectById(req.params.id)
-          .then((result) => {
-            if (result.changedRows) {
-              fs.unlink(urlToUnlink, (err) => {
-                if (err) {
-                  console.log(err);
-                  res
-                    .status(400)
-                    .send(
-                      "image deleted but error during suppression image from the server"
-                    );
-                } else {
-                  res.status(201).send("image deleted from the project");
-                }
-              });
-            } else {
-              res.status(404).send("no image to delete");
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-            res.status(404).send("error deleting image from project");
-          });
-      } else {
-        res.send("no image found");
-      }
+  deleteImageProjectById(req.params.id)
+    .then(() => {
+      res.status((203).send());
     })
     .catch((err) => {
       console.log(err);
-      res.status(404).send("error retrieving image for this project");
+      res.status(404).send("error deleting image from project");
     });
 });
 
