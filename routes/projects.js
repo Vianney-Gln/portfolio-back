@@ -15,22 +15,6 @@ const {
   runValidateProjectFieldsUpdate,
   checkAuth,
 } = require("../middlewares/middlewares");
-// Path for sendFile
-const path = require("path");
-// FS
-const fs = require("fs");
-// Multer
-const multer = require("multer");
-const storage = multer.diskStorage({
-  destination: function (req, file, callback) {
-    const path = `uploads`;
-    callback(null, path);
-  },
-  filename: function (req, file, callback) {
-    callback(null, `${file.originalname}`);
-  },
-});
-const upload = multer({ storage: storage });
 
 // Routes getting all projects
 projectRouter.get("/projects", (req, res) => {
@@ -63,14 +47,10 @@ projectRouter.get("/projects/:id", (req, res) => {
 projectRouter.post(
   "/projects",
   checkAuth,
-  upload.single("image-project"),
   runValidateProjectFields,
   (req, res) => {
-    let urlImage = null;
-    const { name, url, description, date } = req.body;
-    if (req.file) urlImage = req.file.path;
-
-    createProject({ name, url, urlImage, description, date })
+    const { name, url, base64, description, date, type } = req.body;
+    createProject({ name, url, base64, description, date, type })
       .then((result) => {
         res.status(201).send(`project ${result.insertId} created!`);
       })
@@ -107,27 +87,15 @@ projectRouter.get("/projects/image/:id", (req, res) => {
 // Route deleting a project by his id, and remove the image associated to the server.
 
 projectRouter.delete("/projects/:id", checkAuth, (req, res) => {
-  getPathImagesProjectsById(req.params.id)
-    .then((result) => {
-      deleteProjectById(req.params.id)
-        .then(() => {
-          if (result.urlImage) {
-            fs.unlink(result.urlImage, (err) => {
-              if (err) console.log(err);
-            });
-          }
-          res
-            .status(200)
-            .send(`project with id ${req.params.id} deleted with success`);
-        })
-        .catch((err) => {
-          console.log(err);
-          res.status(404).send("error during the delete request");
-        });
+  deleteProjectById(req.params.id)
+    .then(() => {
+      res
+        .status(200)
+        .send(`project with id ${req.params.id} deleted with success`);
     })
     .catch((err) => {
       console.log(err);
-      res.status(404).send("error during the request");
+      res.status(404).send("error during the delete request");
     });
 });
 
@@ -135,7 +103,6 @@ projectRouter.delete("/projects/:id", checkAuth, (req, res) => {
 projectRouter.put(
   "/projects/:id",
   checkAuth,
-  upload.single("image-project"),
   runValidateProjectFieldsUpdate,
   (req, res) => {
     getPathImagesProjectsById(req.params.id)
