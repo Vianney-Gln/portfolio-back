@@ -9,14 +9,10 @@ const db = connection.promise();
 const getProjects = () => {
   return db.query("SELECT * FROM projects").then((result) => result[0]);
 };
-/**
- * Function getting only images from projects by id
- * @param {number} id
- * @returns {promise}
- */
-const getPathImagesProjectsById = (id) => {
+
+const getProjectImageById = (id) => {
   return db
-    .query("SELECT urlImage FROM projects WHERE id = ?", [id])
+    .query("SELECT base64, type FROM projects WHERE id = ?", [id])
     .then((result) => result[0][0]);
 };
 
@@ -25,11 +21,11 @@ const getPathImagesProjectsById = (id) => {
  * @param {object} param0
  * @returns {promise}
  */
-const createProject = ({ name, url, urlImage, description, date }) => {
+const createProject = ({ name, url, base64, description, date, type }) => {
   return db
     .query(
-      "INSERT INTO projects (name, url, urlImage, description, date) VALUES (?,?,?,?,?)",
-      [name, url, urlImage, description, date]
+      "INSERT INTO projects (name, url, base64, description, date,type) VALUES (?,?,?,?,?,?)",
+      [name, url, base64, description, date, type]
     )
     .then((result) => result[0]);
 };
@@ -65,7 +61,7 @@ const updateProjectById = (data, id) => {
  */
 const deleteImageProjectById = (id) => {
   return db
-    .query("UPDATE projects SET urlImage = null WHERE id = ?", [id])
+    .query("UPDATE projects SET base64 = null, type = null WHERE id = ?", [id])
     .then((result) => result[0]);
 };
 
@@ -76,16 +72,18 @@ const deleteImageProjectById = (id) => {
  */
 const getProjectById = (id) => {
   return db
-    .query("SELECT * FROM projects WHERE id = ?", [id])
+    .query("SELECT id,name,url,description,date FROM projects WHERE id = ?", [
+      id,
+    ])
     .then((result) => result[0][0]);
 };
 
 module.exports = {
   getProjects,
   createProject,
-  getPathImagesProjectsById,
   deleteProjectById,
   updateProjectById,
   deleteImageProjectById,
   getProjectById,
+  getProjectImageById,
 };
