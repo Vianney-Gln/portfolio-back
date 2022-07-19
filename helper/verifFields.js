@@ -12,6 +12,7 @@ const validateProjectFields = (data, toCreate = true) => {
   return Joi.object({
     name: Joi.string().presence(presence),
     url: Joi.string().max(255).presence(presence),
+    urlImage: Joi.string().presence("optional"),
     date: Joi.string().max(255).presence(presence),
     description: Joi.string().presence(presence),
   }).validate(data, { abortEarly: false, allowUnknown: true }).error;

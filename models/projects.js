@@ -21,11 +21,11 @@ const getProjectImageById = (id) => {
  * @param {object} param0
  * @returns {promise}
  */
-const createProject = ({ name, url, base64, description, date, type }) => {
+const createProject = ({ name, url, urlImage, description, date }) => {
   return db
     .query(
-      "INSERT INTO projects (name, url, base64, description, date,type) VALUES (?,?,?,?,?,?)",
-      [name, url, base64, description, date, type]
+      "INSERT INTO projects (name, url, urlimage, description, date) VALUES (?,?,?,?,?)",
+      [name, url, urlImage, description, date]
     )
     .then((result) => result[0]);
 };
