@@ -72,9 +72,7 @@ const deleteImageProjectById = (id) => {
  */
 const getProjectById = (id) => {
   return db
-    .query("SELECT id,name,url,description,date FROM projects WHERE id = ?", [
-      id,
-    ])
+    .query("SELECT * FROM projects WHERE id = ?", [id])
     .then((result) => result[0][0]);
 };
 
