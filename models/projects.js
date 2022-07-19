@@ -12,7 +12,7 @@ const getProjects = () => {
 
 const getProjectImageById = (id) => {
   return db
-    .query("SELECT base64, type FROM projects WHERE id = ?", [id])
+    .query("SELECT urlImage FROM projects WHERE id = ?", [id])
     .then((result) => result[0][0]);
 };
 
@@ -61,7 +61,7 @@ const updateProjectById = (data, id) => {
  */
 const deleteImageProjectById = (id) => {
   return db
-    .query("UPDATE projects SET base64 = null, type = null WHERE id = ?", [id])
+    .query("UPDATE projects SET urlimage = null", [id])
     .then((result) => result[0]);
 };
 
