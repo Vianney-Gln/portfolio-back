@@ -50,8 +50,8 @@ projectRouter.post(
   checkAuth,
   runValidateProjectFields,
   (req, res) => {
-    const { name, url, base64, description, date, type } = req.body;
-    createProject({ name, url, base64, description, date, type })
+    const { name, url, urlImage, description, date } = req.body;
+    createProject({ name, url, urlImage, description, date })
       .then((result) => {
         res.status(201).send(`project ${result.insertId} created!`);
       })
