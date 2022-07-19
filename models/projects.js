@@ -12,7 +12,7 @@ const getProjects = () => {
 
 const getProjectImageById = (id) => {
   return db
-    .query("SELECT base64, type FROM projects WHERE id = ?", [id])
+    .query("SELECT urlImage FROM projects WHERE id = ?", [id])
     .then((result) => result[0][0]);
 };
 
@@ -21,11 +21,11 @@ const getProjectImageById = (id) => {
  * @param {object} param0
  * @returns {promise}
  */
-const createProject = ({ name, url, base64, description, date, type }) => {
+const createProject = ({ name, url, urlImage, description, date }) => {
   return db
     .query(
-      "INSERT INTO projects (name, url, base64, description, date,type) VALUES (?,?,?,?,?,?)",
-      [name, url, base64, description, date, type]
+      "INSERT INTO projects (name, url, urlimage, description, date) VALUES (?,?,?,?,?)",
+      [name, url, urlImage, description, date]
     )
     .then((result) => result[0]);
 };
@@ -61,7 +61,7 @@ const updateProjectById = (data, id) => {
  */
 const deleteImageProjectById = (id) => {
   return db
-    .query("UPDATE projects SET base64 = null, type = null WHERE id = ?", [id])
+    .query("UPDATE projects SET urlimage = null", [id])
     .then((result) => result[0]);
 };
 
@@ -72,9 +72,7 @@ const deleteImageProjectById = (id) => {
  */
 const getProjectById = (id) => {
   return db
-    .query("SELECT id,name,url,description,date FROM projects WHERE id = ?", [
-      id,
-    ])
+    .query("SELECT * FROM projects WHERE id = ?", [id])
     .then((result) => result[0][0]);
 };
 
