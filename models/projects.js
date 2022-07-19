@@ -61,7 +61,7 @@ const updateProjectById = (data, id) => {
  */
 const deleteImageProjectById = (id) => {
   return db
-    .query("UPDATE projects SET urlimage = null", [id])
+    .query("UPDATE projects SET urlimage = null WHERE id = ?", [id])
     .then((result) => result[0]);
 };
 
