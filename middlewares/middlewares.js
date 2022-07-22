@@ -139,6 +139,10 @@ const verifyToken = (req, res) => {
   });
 };
 
+const protectFormContact = (req, res) => {
+  console.log("coucou");
+};
+
 module.exports = {
   runValidateIntroFields,
   runValidateProjectFields,
@@ -148,4 +152,5 @@ module.exports = {
   getPassword,
   checkAuth,
   verifyToken,
+  protectFormContact,
 };
