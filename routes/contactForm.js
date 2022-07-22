@@ -3,6 +3,7 @@ const nodemailer = require("nodemailer");
 const { runValidateContactFields } = require("../middlewares/middlewares");
 require("dotenv").config();
 
+// Route sending email
 contactFormRouter.post("/", runValidateContactFields, (req, res) => {
   const mailTransporter = nodemailer.createTransport({
     service: "gmail",
