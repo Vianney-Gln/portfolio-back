@@ -18,4 +18,34 @@ const validateProjectFields = (data, toCreate = true) => {
   }).validate(data, { abortEarly: false, allowUnknown: true }).error;
 };
 
-module.exports = { validateIntroFields, validateProjectFields };
+const validateContactFields = (data) => {
+  return Joi.object({
+    name: Joi.string()
+      .max(100)
+      .presence("required")
+      .regex(/[$\(\)<>]/, { invert: true }),
+    firstname: Joi.string()
+      .max(100)
+      .presence("required")
+      .regex(/[$\(\)<>]/, { invert: true }),
+    subject: Joi.string()
+      .max(255)
+      .presence("required")
+      .regex(/[$\(\)<>]/, { invert: true }),
+    message: Joi.string()
+      .min(20)
+      .max(255)
+      .presence("required")
+      .regex(/[$\(\)<>]/, { invert: true }),
+    email: Joi.string()
+      .email()
+      .presence("required")
+      .regex(/[$\(\)<>]/, { invert: true }),
+  }).validate(data, { abortEarly: false, allowUnknown: true }).error;
+};
+
+module.exports = {
+  validateIntroFields,
+  validateProjectFields,
+  validateContactFields,
+};
