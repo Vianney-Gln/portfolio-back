@@ -1,8 +1,9 @@
 const contactFormRouter = require("express").Router();
 const nodemailer = require("nodemailer");
+const { runValidateContactFields } = require("../middlewares/middlewares");
 require("dotenv").config();
 
-contactFormRouter.post("/", (req, res) => {
+contactFormRouter.post("/", runValidateContactFields, (req, res) => {
   const mailTransporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -14,7 +15,7 @@ contactFormRouter.post("/", (req, res) => {
     from: req.body.email,
     to: process.env.EMAIL,
     subject: req.body.subject,
-    html: `<p>${req.body.message}</p>`,
+    html: `<p>${req.body.message}</p><p><span>${req.body.name} ${req.body.firstname}</span></p>`,
   };
   mailTransporter.sendMail(mailDetails, (err, data) => {
     if (err) {
