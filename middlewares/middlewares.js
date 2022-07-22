@@ -4,6 +4,7 @@ require("dotenv").config();
 const {
   validateIntroFields,
   validateProjectFields,
+  validateContactFields,
 } = require("../helper/verifFields");
 const { hashPassword } = require("../helper/utility");
 
@@ -139,6 +140,24 @@ const verifyToken = (req, res) => {
   });
 };
 
+/* ------ Contact Form ------- */
+// Middleware verif create projects data fields
+const runValidateContactFields = (req, res, next) => {
+  const { name, firstname, message, email, subject } = req.body;
+  const error = validateContactFields({
+    name,
+    firstname,
+    message,
+    email,
+    subject,
+  });
+  if (error) {
+    res.status(401).send({ validationError: error.details });
+  } else {
+    next();
+  }
+};
+
 module.exports = {
   runValidateIntroFields,
   runValidateProjectFields,
@@ -148,4 +167,5 @@ module.exports = {
   getPassword,
   checkAuth,
   verifyToken,
+  runValidateContactFields,
 };
